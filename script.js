@@ -1,5 +1,7 @@
 "use strict";
 
+var selectedSynonyms = [];
+
 function init(){
 	$('#search').on('click', getSynonyms);
 }
@@ -28,7 +30,7 @@ function showSynonyms(res){
 	var syns = res.noun.syn;
 	var list = "<ul>";
 	syns.forEach(function(syn){
-		var item = "<li>" + syn + "</li>";
+		var item = "<li class='synonym' onclick='synonymToggle(this)'>" + syn + "</li>";
 		list += item;
 	});
 	list += "</ul>";
@@ -93,6 +95,20 @@ function readMore(e){
 function readLess(e){
 	e.parentNode.style.display = "none";
 	e.parentNode.parentNode.childNodes[0].style.display = "block";
+}
+
+function synonymToggle(e){
+	$(e).toggleClass('selected');
+	if($(e).hasClass('selected')) addSynonym(e.innerHTML);
+	else removeSynonym(e.innerHTML);
+}
+
+function addSynonym(syn){
+	console.log("Add " + syn);
+}
+
+function removeSynonym(syn){
+	console.log("Remove " + syn);
 }
 
 window.onload = init;
