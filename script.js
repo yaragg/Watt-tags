@@ -1,10 +1,10 @@
 "use strict";
 
 function init(){
-	$('#search').on('click', getData);
+	$('#search').on('click', getSynonyms);
 }
 
-function getData(){
+function getSynonyms(){
 	var term = $('#searchterm').val();
 	// var list = $('#synonyms');
 	// var html = "<ul>";
@@ -57,10 +57,26 @@ function showResults(res){
 		var item = "\n<div class='story'>\n";
 		item += "<span class='title'>"+story.title+"</span>\n";
 		if(story.cover) item += "<img class='cover' width='64' height='100' src='" + story.cover + "' alt='Cover' />";
+		if(story.description){
+			item += "\n<p class='description'>";
+			item += "<span class='short'>" + story.description.substr(0, 100) + "... <span onclick='readMore(this)'>Read more</span></span>";
+			item += "<span class='long'>" + story.description + "</span>";
+			item += "</p>";
+		}
 		item += "</div>\n";
 		list.append(item);
 	});
 		
+}
+
+function readMore(e){
+	e.parentNode.style.display = "none";
+	console.log(e);
+	console.log(e.parentNode);
+	console.log(e.parentNode.parentNode);
+	console.log(e.parentNode.parentNode.children);
+	console.log(e.parentNode.parentNode.childNodes);
+	e.parentNode.parentNode.childNodes[1].style.display = "block";
 }
 
 window.onload = init;

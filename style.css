@@ -34,3 +34,7 @@ body{
     display: inline;
     margin-right: 10px;
 }
+
+.long{
+    display: none;
+}
