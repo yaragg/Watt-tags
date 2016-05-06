@@ -1,0 +1,36 @@
+body{
+	font-family: sans-serif;
+    width: 100%;
+    text-align: center;
+}
+
+#results{
+    margin: auto;
+    width: 60%;
+}
+
+#search-bar{
+    margin-bottom: 20px;
+}
+
+.story{
+	background-color: #ddd;
+	clear: both;
+    margin-bottom: 10px;
+    overflow: auto
+}
+
+.cover{
+	float: left;
+}
+
+#synonyms{
+    width: 60%;
+    margin: auto;
+    
+}
+
+#synonyms ul li{
+    display: inline;
+    margin-right: 10px;
+}

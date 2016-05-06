@@ -6,8 +6,33 @@ function init(){
 
 function getData(){
 	var term = $('#searchterm').val();
-	$('#synonyms').append(term);
+	// var list = $('#synonyms');
+	// var html = "<ul>";
+	// synonyms.forEach(function(syn){
+
+	// });
+	// $('#synonyms').append(term);
+	// $('#synonyms').append("")
+	$.ajax({
+		url: "syn.json",
+		dataType: "json",
+		type: 'GET',
+		success: function(res){
+			showSynonyms(res)
+		}
+	});
 	getResults();
+}
+
+function showSynonyms(res){
+	var syns = res.noun.syn;
+	var list = "<ul>";
+	syns.forEach(function(syn){
+		var item = "<li>" + syn + "</li>";
+		list += item;
+	});
+	list += "</ul>";
+	$('#synonyms').append(list);
 }
 
 function getResults(){
@@ -29,9 +54,11 @@ function showResults(res){
 	var list = $("#results");
 	stories.forEach(function(story){
 		// $("#results").append("<li>"+story.title+"</li>");
-		list.append("<div class='story'>");
-		list.append(story.title);
-		list.append("</div>");
+		var item = "\n<div class='story'>\n";
+		item += "<span class='title'>"+story.title+"</span>\n";
+		if(story.cover) item += "<img class='cover' width='64' height='100' src='" + story.cover + "' alt='Cover' />";
+		item += "</div>\n";
+		list.append(item);
 	});
 		
 }
