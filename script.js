@@ -55,12 +55,28 @@ function showResults(res){
 	stories.forEach(function(story){
 		// $("#results").append("<li>"+story.title+"</li>");
 		var item = "\n<div class='story'>\n";
-		item += "<span class='title'>"+story.title+"</span>\n";
 		if(story.cover) item += "<img class='cover' width='64' height='100' src='" + story.cover + "' alt='Cover' />";
+
+		if(story.voteCount){
+			item += "<p class='votes'>Votes: " + story.voteCount + "</p>";
+		}
+
+
+		if(story.createDate){
+			item += "<p class='createDate'>Date: " + story.createDate.substr(0, 10) + "</p>";
+		}
+
+		item += "<span class='title'>"+story.title+"</span>\n";
+
 		if(story.description){
+			story.description = story.description.replace(/\n/g, "<br/>");
 			item += "\n<p class='description'>";
-			item += "<span class='short'>" + story.description.substr(0, 100) + "... <span onclick='readMore(this)'>Read more</span></span>";
-			item += "<span class='long'>" + story.description + "</span>";
+			item +=  "<span class='short'>" + story.description.substr(0, 300);
+			if(story.description.length > 300){
+				item += "... <span class='more-less' onclick='readMore(this)'>Read more</span></span>";
+				item += "<span class='long'>" + story.description + " <span class='more-less' onclick='readLess(this)'>Less</span></span>";
+			}
+			else item +="</span>";
 			item += "</p>";
 		}
 		item += "</div>\n";
@@ -71,12 +87,12 @@ function showResults(res){
 
 function readMore(e){
 	e.parentNode.style.display = "none";
-	console.log(e);
-	console.log(e.parentNode);
-	console.log(e.parentNode.parentNode);
-	console.log(e.parentNode.parentNode.children);
-	console.log(e.parentNode.parentNode.childNodes);
 	e.parentNode.parentNode.childNodes[1].style.display = "block";
+}
+
+function readLess(e){
+	e.parentNode.style.display = "none";
+	e.parentNode.parentNode.childNodes[0].style.display = "block";
 }
 
 window.onload = init;
