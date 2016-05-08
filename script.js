@@ -1,34 +1,47 @@
 "use strict";
 
 var selectedSynonyms = [];
+var currentResults = [];
+var term;
+
+var url = "http://words.bighugelabs.com/api/2/d5fbbd6e0579ecdd4b7f4309a6bfa262/"
 
 function init(){
 	$('#search').on('click', getSynonyms);
+
+	//Trigger event when Enter pressed on text field adapted from http://stackoverflow.com/questions/4418819/submit-form-on-enter-when-in-text-field
+	$("#searchterm").on('keyup', function(e){
+		if(e.keyCode == 13) {
+			getSynonyms();
+			return;
+		}
+	});
 }
 
 function getSynonyms(){
-	var term = $('#searchterm').val();
-	// var list = $('#synonyms');
-	// var html = "<ul>";
-	// synonyms.forEach(function(syn){
+	term = $('#searchterm').val();
+	$('#synonyms').empty();
+	if(term=="") return;
 
-	// });
-	// $('#synonyms').append(term);
-	// $('#synonyms').append("")
 	$.ajax({
-		url: "syn.json",
-		dataType: "json",
+		url: url + term + "/json?callback=synonymCallback",
+		dataType: "jsonp",
 		type: 'GET',
-		success: function(res){
-			showSynonyms(res)
-		}
+		success: synonymCallback
 	});
-	getResults();
+	//getResults();
+}
+
+function synonymCallback(res){
+	console.log(res);
+	showSynonyms(res);
 }
 
 function showSynonyms(res){
 	var syns = res.noun.syn;
 	var list = "<ul>";
+	list += "<li class='synonym selected' onclick='synonymToggle(this)'>" + term + "</li>";
+	addSynonym(term);
 	syns.forEach(function(syn){
 		var item = "<li class='synonym' onclick='synonymToggle(this)'>" + syn + "</li>";
 		list += item;
@@ -37,20 +50,23 @@ function showSynonyms(res){
 	$('#synonyms').append(list);
 }
 
-function getResults(){
+function getResults(tag){
 	$.ajax({
 		url: "test.json",
 		dataType: "json",
 		type: 'GET',
-		success: function(res){
-			showResults(res)
-		}
+		success: storiesCallback
 	});
 }
 
-function showResults(res){
+function storiesCallback(res){
+	return res.stories;
+}
+
+function showResults(){
 	console.log("Inside showResults");
-	var stories = res.stories;
+	// var stories = res.stories;
+	var stories = currentResults;
 	console.log(stories);
 	// $("#results").innerHTML = "<ul></ul>";
 	var list = $("#results");
@@ -104,11 +120,40 @@ function synonymToggle(e){
 }
 
 function addSynonym(syn){
-	console.log("Add " + syn);
+	// console.log("Add " + syn);
+	// var result = { tag : syn, results : getResults(syn)};
+	// selectedSynonyms.push(result);
+	// currentResults = currentResults.concat(result.results);
+
+}
+
+function buildResultList(){
+	currentResults = [];
+	for(var i=0; i<selectedSynonyms.length; i++){
+		for(var j=0; j<selectedSynonyms[i].results.length; j++){
+			if(!isInCurrentResults(selectedSynonyms[i].results[j])){
+				currentResults.push(selectedSynonyms[i].results[j]);
+			}
+		}
+	}
+}
+
+function isInCurrentResults(result){
+	for(var i=0; i<currentResults.length; i++){
+		if(currentResults.id == result.id) return true;
+	}
+	return false;
 }
 
 function removeSynonym(syn){
 	console.log("Remove " + syn);
+	for(var i=0; i<selectedSynonyms.length; i++){
+		if(selectedSynonyms[i].tag == syn){
+			selectedSynonyms.splice(i, 1);
+			break;
+		}
+	}
+	buildResultList();
 }
 
 window.onload = init;
