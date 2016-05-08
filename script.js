@@ -6,7 +6,7 @@ var term;
 var wattpadResult;
 var currentSynonym;
 
-var BHTUrl = "http://words.bighugelabs.com/api/2/d5fbbd6e0579ecdd4b7f4309a6bfa262/"
+var BHTUrl = "https://words.bighugelabs.com/api/2/d5fbbd6e0579ecdd4b7f4309a6bfa262/"
 var wattpadUrl = "https://people.rit.edu/~yxg5358/330/watt-tags/proxy.php?callback=storiesCallback&tag="
 
 function init(){
@@ -26,6 +26,7 @@ function getSynonyms(){
 	selectedSynonyms = [];
 	currentResults = [];
 	$('#synonyms').empty();
+	$('#results').empty();
 	if(term=="") return;
 
 	$.ajax({
@@ -34,7 +35,6 @@ function getSynonyms(){
 		type: 'GET',
 		success: synonymCallback
 	});
-	//getResults();
 }
 
 function synonymCallback(res){
@@ -66,28 +66,20 @@ function getResults(tag){
 }
 
 function storiesCallback(res){
-	console.log("in storiesCallback");
-	console.log(res);
-	// return res.stories;
-	// wattpadResult = res.stories;
 	var result = { tag : currentSynonym, results : res.stories};
 	selectedSynonyms.push(result);
-	currentResults = currentResults.concat(result.results);
+	// currentResults = currentResults.concat(result.results);
+	currentResults = result.results.concat(currentResults);
 	showResults();
 }
 
 function showResults(){
-	console.log("Inside showResults");
-	// var stories = res.stories;
 	var stories = currentResults;
-	console.log(stories);
-	// $("#results").innerHTML = "<ul></ul>";
 	var list = $("#results");
 	list.empty();
 	stories.forEach(function(story){
-		// $("#results").append("<li>"+story.title+"</li>");
 		var item = "\n<div class='story'>\n";
-		if(story.cover) item += "<img class='cover' width='64' height='100' src='" + story.cover + "' alt='Cover' />";
+		if(story.cover) item += "<a href='"+ story.url + "'><img class='cover' width='64' height='100' src='" + story.cover + "' alt='Cover' /></a>";
 
 		if(story.voteCount){
 			item += "<p class='votes'>Votes: " + story.voteCount + "</p>";
@@ -98,7 +90,8 @@ function showResults(){
 			item += "<p class='createDate'>Date: " + story.createDate.substr(0, 10) + "</p>";
 		}
 
-		item += "<span class='title'>"+story.title+"</span>\n";
+		item += "<span class='title'><a href='"+ story.url + "'>"+story.title+"</a></span>\n";
+		item += "<p class='author'>by " + story.user + "</p>";
 
 		if(story.description){
 			story.description = story.description.replace(/\n/g, "<br/>");
