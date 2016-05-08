@@ -3,8 +3,11 @@
 var selectedSynonyms = [];
 var currentResults = [];
 var term;
+var wattpadResult;
+var currentSynonym;
 
-var url = "http://words.bighugelabs.com/api/2/d5fbbd6e0579ecdd4b7f4309a6bfa262/"
+var BHTUrl = "http://words.bighugelabs.com/api/2/d5fbbd6e0579ecdd4b7f4309a6bfa262/"
+var wattpadUrl = "https://people.rit.edu/~yxg5358/330/watt-tags/proxy.php?callback=storiesCallback&tag="
 
 function init(){
 	$('#search').on('click', getSynonyms);
@@ -20,11 +23,13 @@ function init(){
 
 function getSynonyms(){
 	term = $('#searchterm').val();
+	selectedSynonyms = [];
+	currentResults = [];
 	$('#synonyms').empty();
 	if(term=="") return;
 
 	$.ajax({
-		url: url + term + "/json?callback=synonymCallback",
+		url: BHTUrl + term + "/json?callback=synonymCallback",
 		dataType: "jsonp",
 		type: 'GET',
 		success: synonymCallback
@@ -52,15 +57,23 @@ function showSynonyms(res){
 
 function getResults(tag){
 	$.ajax({
-		url: "test.json",
-		dataType: "json",
+		url: wattpadUrl + tag,
+		// url: "proxy.php?callback=storiesCallback&url=test.json",
+		dataType: "jsonp",
 		type: 'GET',
 		success: storiesCallback
 	});
 }
 
 function storiesCallback(res){
-	return res.stories;
+	console.log("in storiesCallback");
+	console.log(res);
+	// return res.stories;
+	// wattpadResult = res.stories;
+	var result = { tag : currentSynonym, results : res.stories};
+	selectedSynonyms.push(result);
+	currentResults = currentResults.concat(result.results);
+	showResults();
 }
 
 function showResults(){
@@ -70,6 +83,7 @@ function showResults(){
 	console.log(stories);
 	// $("#results").innerHTML = "<ul></ul>";
 	var list = $("#results");
+	list.empty();
 	stories.forEach(function(story){
 		// $("#results").append("<li>"+story.title+"</li>");
 		var item = "\n<div class='story'>\n";
@@ -120,10 +134,10 @@ function synonymToggle(e){
 }
 
 function addSynonym(syn){
-	// console.log("Add " + syn);
-	// var result = { tag : syn, results : getResults(syn)};
-	// selectedSynonyms.push(result);
-	// currentResults = currentResults.concat(result.results);
+	console.log("Add " + syn);
+	currentSynonym = syn;
+	getResults(syn);
+	
 
 }
 
@@ -154,6 +168,7 @@ function removeSynonym(syn){
 		}
 	}
 	buildResultList();
+	showResults();
 }
 
 window.onload = init;
