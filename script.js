@@ -19,14 +19,21 @@ function init(){
 			return;
 		}
 	});
+
+	$("#sort").on('change', sortResults);
+
+	$("#searchterm").val(localStorage.getItem("yxg5358_search_term"));
 }
 
 function getSynonyms(){
+	$('body').css({'cursor' : 'wait'});
 	term = $('#searchterm').val();
+	localStorage.setItem("yxg5358_search_term", term);
 	selectedSynonyms = [];
 	currentResults = [];
 	$('#synonyms').empty();
 	$('#results').empty();
+	$("#sort-by").hide();
 	if(term=="") return;
 
 	$.ajax({
@@ -39,6 +46,7 @@ function getSynonyms(){
 
 function synonymCallback(res){
 	console.log(res);
+	$('body').css({'cursor' : 'default'});
 	showSynonyms(res);
 }
 
@@ -52,10 +60,12 @@ function showSynonyms(res){
 		list += item;
 	});
 	list += "</ul>";
-	$('#synonyms').append(list);
+	$('#synonyms').append(list).hide();
+	$('#synonyms').fadeIn();
 }
 
 function getResults(tag){
+	$('body').css({'cursor' : 'wait'});
 	$.ajax({
 		url: wattpadUrl + tag,
 		// url: "proxy.php?callback=storiesCallback&url=test.json",
@@ -70,13 +80,19 @@ function storiesCallback(res){
 	selectedSynonyms.push(result);
 	// currentResults = currentResults.concat(result.results);
 	currentResults = result.results.concat(currentResults);
-	showResults();
+	$('body').css({'cursor' : 'default'});
+	sortResults();
 }
 
 function showResults(){
 	var stories = currentResults;
 	var list = $("#results");
 	list.empty();
+	if(stories.length == 0){
+		list.append("<div class='story'>No stories found.</div>");
+		return;
+	}
+	$("#sort-by").show();
 	stories.forEach(function(story){
 		var item = "\n<div class='story'>\n";
 		if(story.cover) item += "<a href='"+ story.url + "'><img class='cover' width='64' height='100' src='" + story.cover + "' alt='Cover' /></a>";
@@ -105,7 +121,8 @@ function showResults(){
 			item += "</p>";
 		}
 		item += "</div>\n";
-		list.append(item);
+		list.append(item).hide();
+		list.fadeIn();
 	});
 		
 }
@@ -145,6 +162,19 @@ function buildResultList(){
 	}
 }
 
+function sortResults(){
+	var attribute = $("#sort").val();
+	if(attribute==null){
+		showResults();
+		return;
+	}
+	console.log("Sort by "+attribute);
+	if(attribute=='title' || attribute=='user') currentResults.sort(function(a, b){return a[attribute].localeCompare(b[attribute]);});
+	else if(attribute=='createDate') currentResults.sort(function(a, b){return -a[attribute].localeCompare(b[attribute]);}); 
+	else currentResults.sort(function(a, b){return b[attribute]-a[attribute];}); 
+	showResults();
+}
+
 function isInCurrentResults(result){
 	for(var i=0; i<currentResults.length; i++){
 		if(currentResults.id == result.id) return true;
@@ -161,7 +191,7 @@ function removeSynonym(syn){
 		}
 	}
 	buildResultList();
-	showResults();
+	sortResults();
 }
 
 window.onload = init;

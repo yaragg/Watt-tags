@@ -9,6 +9,12 @@ h1{
     color: #ff8900;
 }
 
+#sort-by{
+    display: none;
+    margin-top: 5px;
+    margin-bottom: 13px;
+}
+
 #results{
     margin: auto;
     width: 60%;
@@ -38,7 +44,7 @@ h1{
     padding: 15px;
 	clear: both;
     margin-bottom: 15px;
-    overflow: auto
+    overflow: auto;
 }
 
 input:focus{

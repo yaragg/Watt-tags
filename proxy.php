@@ -1,6 +1,6 @@
 <?php
 	if(array_key_exists('tag', $_REQUEST)){
-		$url = 'https://api.wattpad.com:443/v4/stories?query=%23' . $_REQUEST['tag'];
+		$url = 'https://api.wattpad.com:443/v4/stories?query=%23' . urlencode($_REQUEST['tag']);
 	}
 	else{
 		echo "No URL requested!";
