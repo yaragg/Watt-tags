@@ -167,4 +167,23 @@ input:focus{
     #results, #synonyms{
         width: 100%;
     }
+    
+    body{
+        margin: 0;
+        width: 100%;
+    }
+    
+    #top-link{
+        bottom: 0;
+        width: 100%;
+        margin: auto;
+        margin-bottom: 0;
+        right: 0;
+    }
+    #top-link a{
+        border-radius: 0;
+        width: 100%;
+        display: block;
+        margin-bottom: 0;
+    }
 }
