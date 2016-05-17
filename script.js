@@ -140,6 +140,7 @@
 	}
 
 	//Make the entire description visible for the story
+	//http://stackoverflow.com/questions/14245716/is-it-possible-to-call-a-javascript-function-inside-an-immediately-invoked-funct
 	$.extend(WattTags, {
 		readMore : function (e){
 			e.parentNode.style.display = "none";
