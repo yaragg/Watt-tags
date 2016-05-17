@@ -1,3 +1,28 @@
+@font-face {
+    font-family: 'Good Dog';
+    src: url('fonts/GoodDog-webfont.eot');
+    src: url('fonts/GoodDog-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/GoodDog-webfont.woff') format('woff'),
+         url('fonts/GoodDog-webfont.ttf') format('truetype'),
+         url('fonts/GoodDog-webfont.svg#gooddogregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+@font-face {
+    font-family: 'Surface';
+    src: url('fonts/Surface_Medium-webfont.eot');
+    src: url('fonts/Surface_Medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/Surface_Medium-webfont.woff') format('woff'),
+         url('fonts/Surface_Medium-webfont.ttf') format('truetype'),
+         url('fonts/Surface_Medium-webfont.svg#surfacemedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body{
 	font-family: sans-serif;
     width: 100%;
@@ -7,6 +32,10 @@ body{
 
 h1{
     color: #ff8900;
+    font-size: 400%;
+    margin-top: 5px;
+    margin-bottom: 40px;
+    font-family: 'Good Dog';
 }
 
 #sort-by{
@@ -65,6 +94,7 @@ input:focus{
 #synonyms{
     width: 60%;
     margin: auto;
+    height: auto;
     
 }
 
@@ -73,7 +103,7 @@ input:focus{
 }
 
 #synonyms ul li{
-    display: inline;
+    display: inline-block;
     margin-right: 10px;
 }
 
@@ -100,15 +130,35 @@ input:focus{
     cursor: pointer;
 }
 
+#spinner{
+    display: none;
+    margin-top: 40px;
+}
+
 .title, a{
     color: #ff8900;
     font-weight: bold;
     margin-bottom: 20px;
-    font-size: 120%;
+    font-size: 140%;
     text-decoration: none;
+    font-family: 'Surface';
 }
 
 .author{
     margin-top: 5px;
+    font-style: italic;
+}
+
+#top-link{
+    position: fixed;
+    right: 10%;
+    bottom: 15px;
+}
+
+#top-link a{
+    font-weight: normal;
+    background-color: #ffedd9;
+    padding: 7px 20px;
+    border-radius: 20px;
     font-style: italic;
 }

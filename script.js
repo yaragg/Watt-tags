@@ -26,7 +26,6 @@ function init(){
 }
 
 function getSynonyms(){
-	$('body').css({'cursor' : 'wait'});
 	term = $('#searchterm').val();
 	localStorage.setItem("yxg5358_search_term", term);
 	selectedSynonyms = [];
@@ -40,13 +39,16 @@ function getSynonyms(){
 		url: BHTUrl + term + "/json?callback=synonymCallback",
 		dataType: "jsonp",
 		type: 'GET',
+		beforeSend: function(){
+			$("#spinner").show();
+		},
 		success: synonymCallback
 	});
 }
 
 function synonymCallback(res){
+	$("#spinner").hide();
 	console.log(res);
-	$('body').css({'cursor' : 'default'});
 	showSynonyms(res);
 }
 
@@ -65,22 +67,24 @@ function showSynonyms(res){
 }
 
 function getResults(tag){
-	$('body').css({'cursor' : 'wait'});
 	$.ajax({
 		url: wattpadUrl + tag,
 		// url: "proxy.php?callback=storiesCallback&url=test.json",
 		dataType: "jsonp",
 		type: 'GET',
+		beforeSend: function(){
+			$("#spinner").show();
+		},
 		success: storiesCallback
 	});
 }
 
 function storiesCallback(res){
+	$("#spinner").hide();
 	var result = { tag : currentSynonym, results : res.stories};
 	selectedSynonyms.push(result);
 	// currentResults = currentResults.concat(result.results);
 	currentResults = result.results.concat(currentResults);
-	$('body').css({'cursor' : 'default'});
 	sortResults();
 }
 
