@@ -124,6 +124,9 @@ function showResults(){
 			else item +="</span>";
 			item += "</p>";
 		}
+		else{
+			item += "\n<p class='description'>No description found.</p>";
+		}
 		item += "</div>\n";
 		list.append(item).hide();
 		list.fadeIn();
