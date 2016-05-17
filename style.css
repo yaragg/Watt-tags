@@ -66,7 +66,6 @@ h1{
 }
 
 .story{
-/*	background-color: #ddd;*/
     border: 1px solid #f48300;
     border-radius: 10px;
     box-shadow: 7px 7px 7px #ffe6c9;
@@ -125,7 +124,6 @@ input:focus{
 
 .more-less{
     color: #f48300;
-/*    font-weight: bold;*/
     font-style: italic;
     cursor: pointer;
 }
